@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.KillingFloor{
+    height: 800px;
+    width: 1300px;
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.kuponyNaPiwoWyrwidaba{
+    position: absolute;
+    top: 20px;
+    left: 200px;
+}
+
+.kuponyNaPiwoWaligory{
+    position: absolute;
+    top: 20px;
+    left: 900px;
+}
+
+.pangasienica{
+    height: 800px;
+    width: 50px;
+    background-color: brown;
+    position: absolute;
+    left: 350px;
+}
+
+.niby-zolw{
+    height: 800px;
+    width: 50px;
+    background-color: brown;
+    position: absolute;
+    left: 1050px;
+}
+
+.wyrwidab{
+    height: 50px;
+    width: 50px;
+    background-color: coral;
+    position: absolute;
+    top: 750px;
+    left: 290px;
+}
+
+.waligora{
+    height: 50px;
+    width: 50px;
+    background-color: rgb(255, 80, 80);
+    position: absolute;
+    top: 750px;
+    left: 990px;
+}
+
+.ciulikL{
+    background-color: brown;
+    width: 70px;
+    height: 20px;
+    position: absolute;
+    top: 50px
+    /* left: 47vw; */
+}
