@@ -8,6 +8,12 @@
     font-style: normal;
 }
 
+.wynik{
+    position:absolute;
+    top: 350px;
+    left: 650px;
+}
+
 .kuponyNaPiwoWyrwidaba{
     position: absolute;
     top: 20px;

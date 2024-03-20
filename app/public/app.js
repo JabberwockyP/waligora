@@ -1,14 +1,8 @@
 const socket = io();
-
+let tabGraczy = []
 // Event handler for receiving chat messages
-socket.on('connection', () => {
-  // Handle received message
-  console.log("G")
-  
-});
-
-socket.on("GoodMoaning", () => {
-    console.log("Good Moaning")
+socket.on("dolaczyl", (data) => {
+    tabGraczy = data
 })
 
 
@@ -20,29 +14,17 @@ let tablica_ciulikow = [[],[]]
 let tablica_ciulikowP = [[],[]]
 const WYRWIDAB = document.querySelector(".wyrwidab");
 const WALIGORA = document.querySelector(".waligora");
-let gracz = true;
+let gracz = false;
 let kuponyNaPiwoWyrwidaba = 0;
 let kuponyNaPiwoWaligory = 0;
-
-PAPASMERF.addEventListener('click', () => {
-    socket.emit("yo", kuponyNaPiwoWaligory)
-    kuponyNaPiwoWaligory += 1
-    console.log(kuponyNaPiwoWaligory)
-})
-
-socket.on("lewy", (siema) => {
-    kuponyNaPiwoWaligory = siema + 1
-    
-})
-
-
-
+let skuty = false
 
 
 function generujCiulika(){
     let ciulik = document.createElement("div");
     ciulik.setAttribute("class", "ciulikL");
     let x = Math.floor(Math.random()*CIULIKI_POS.length)
+    socket.emit("ruszajL", x)
     ciulik.style.left = `${CIULIKI_POS[x]}px`
     // console.log(x)
     x == 0 ? tablica_ciulikow[1].push(true) : tablica_ciulikow[1].push(false)
@@ -51,10 +33,37 @@ function generujCiulika(){
     PAPASMERF.appendChild(ciulik)
 }
 
+socket.on("ruszajL", x => {
+    let ciulik = document.createElement("div");
+    ciulik.setAttribute("class", "ciulikL");
+    ciulik.style.left = `${CIULIKI_POS[x]}px`
+    x == 0 ? tablica_ciulikow[1].push(true) : tablica_ciulikow[1].push(false)
+    // ciulik.style.top = `50px`
+    tablica_ciulikow[0].push(ciulik);
+    PAPASMERF.appendChild(ciulik)
+
+    if(tablica_ciulikow[0].length > 9){
+        tablica_ciulikow[0].shift()
+    }
+    if(tablica_ciulikow[1].length >= 8){
+        tablica_ciulikow[1].shift()
+    }
+    
+    // console.log(tablica_ciulikow[1][7])
+    // console.log(tablica_ciulikow[1])
+    tablica_ciulikow[0].forEach(ciul => {
+
+        ciul.style.top = `${parseInt(window.getComputedStyle(ciul).getPropertyValue("top").replace("px", "")) + 100}px`;
+        // console.log(window.getComputedStyle(ciul).getPropertyValue("top"))
+        // console.log(tablica_ciulikow[0])
+    })
+})
+
 function generujCiulikaP(){
     let ciulik = document.createElement("div");
     ciulik.setAttribute("class", "ciulikL");
     let x = Math.floor(Math.random()*CIULIKIP.length)
+    socket.emit("ruszajP", x)
     ciulik.style.left = `${CIULIKIP[x]}px`
     // console.log(x)
     x == 0 ? tablica_ciulikowP[1].push(true) : tablica_ciulikowP[1].push(false)
@@ -62,6 +71,32 @@ function generujCiulikaP(){
     tablica_ciulikowP[0].push(ciulik);
     PAPASMERF.appendChild(ciulik)
 }
+
+socket.on("ruszajP", x => {
+    let ciulik = document.createElement("div");
+    ciulik.setAttribute("class", "ciulikL");
+    ciulik.style.left = `${CIULIKIP[x]}px`
+    x == 0 ? tablica_ciulikowP[1].push(true) : tablica_ciulikowP[1].push(false)
+    // ciulik.style.top = `50px`
+    tablica_ciulikowP[0].push(ciulik);
+    PAPASMERF.appendChild(ciulik)
+
+    if(tablica_ciulikowP[0].length > 9){
+        tablica_ciulikowP[0].shift()
+    }
+    if(tablica_ciulikowP[1].length >= 8){
+        tablica_ciulikowP[1].shift()
+    }
+    
+    // console.log(tablica_ciulikow[1][7])
+    // console.log(tablica_ciulikow[1])
+    tablica_ciulikowP[0].forEach(ciul => {
+
+        ciul.style.top = `${parseInt(window.getComputedStyle(ciul).getPropertyValue("top").replace("px", "")) + 100}px`;
+        // console.log(window.getComputedStyle(ciul).getPropertyValue("top"))
+        // console.log(tablica_ciulikow[0])
+    })
+})
 let pozycja;
 // generujCiulika()
 // console.log(tablica_ciulikow)
@@ -74,10 +109,11 @@ function ruszajCiula(){
         tablica_ciulikow[1].shift()
     }
     if(tablica_ciulikow[1][0] != pozycja && tablica_ciulikow[1].length >= 7){
-        console.log("ty ciulu")
+        socket.emit("czekajCwaniaku", socket.id)
     }else{
         kuponyNaPiwoWyrwidaba += 1;
         document.querySelector(".kuponyNaPiwoWyrwidaba").innerHTML = kuponyNaPiwoWyrwidaba
+        socket.emit("kuponyNaPiwoWyrwidaba", kuponyNaPiwoWyrwidaba)
     }
     // console.log(tablica_ciulikow[1][7])
     // console.log(tablica_ciulikow[1])
@@ -89,6 +125,30 @@ function ruszajCiula(){
     })
 }
 
+socket.on("czekajCwaniaku", id => {
+    console.log("czekaj")
+    if(id == socket.id){
+        skuty = true;
+        let gracz = socket.id == tabGraczy[0] ? WYRWIDAB : WALIGORA
+        let tlo = window.getComputedStyle(gracz).getPropertyValue("background-color")
+        gracz.style.background = "green"
+        setTimeout(() =>{
+            skuty = false;
+            gracz.style.background = tlo
+        } , 1000);
+    }
+})
+
+socket.on("kuponyNaPiwoWyrwidaba", kupony => {
+    kuponyNaPiwoWyrwidaba = kupony
+    document.querySelector(".kuponyNaPiwoWyrwidaba").innerHTML = kuponyNaPiwoWyrwidaba
+})
+
+socket.on("kuponyNaPiwoWaligory", kupony => {
+    kuponyNaPiwoWaligory = kupony
+    document.querySelector(".kuponyNaPiwoWaligory").innerHTML = kuponyNaPiwoWaligory
+})
+
 function ruszajCiulaP(){
     generujCiulikaP();
     if(tablica_ciulikowP[0].length > 9){
@@ -98,10 +158,11 @@ function ruszajCiulaP(){
         tablica_ciulikowP[1].shift()
     }
     if(tablica_ciulikowP[1][0] != pozycja && tablica_ciulikowP[1].length >= 7){
-        console.log("ty ciulu")
+        socket.emit("czekajCwaniaku", socket.id)
     }else{
         kuponyNaPiwoWaligory += 1;
         document.querySelector(".kuponyNaPiwoWaligory").innerHTML = kuponyNaPiwoWaligory
+        socket.emit("kuponyNaPiwoWaligory", kuponyNaPiwoWaligory)
     }
     // console.log(tablica_ciulikow[1][7])
     // console.log(tablica_ciulikow[1])
@@ -114,12 +175,16 @@ function ruszajCiulaP(){
 }
 
 
+
+
 function zPrawa(){
-    if(!gracz){
+    if(socket.id == tabGraczy[0]){
+        socket.emit("wyrwidabP")
         WYRWIDAB.style.left = "410px";
         pozycja = true;
         ruszajCiula()
-    }else{
+    }else if(socket.id == tabGraczy[1]){
+        socket.emit("waligoraP")
         WALIGORA.style.left = "1110px";
         pozycja = true
         ruszajCiulaP()
@@ -127,12 +192,30 @@ function zPrawa(){
     
 }
 
+socket.on("wyrwidabP", () =>{
+    WYRWIDAB.style.left = "410px";
+})
+socket.on("wyrwidabL", () =>{
+    WYRWIDAB.style.left = "290px";
+})
+
+socket.on("waligoraP", () =>{
+    WALIGORA.style.left = "1110px";
+})
+socket.on("waligoraL", () =>{
+    WALIGORA.style.left = "990px";
+})
+
+
+
 function doLewa(){
-    if(!gracz){
+    if(socket.id == tabGraczy[0]){
+        socket.emit("wyrwidabL")
         WYRWIDAB.style.left = "290px";
         pozycja = false;
         ruszajCiula()
-    }else{
+    }else if(socket.id == tabGraczy[1]){
+        socket.emit("waligoraL")
         WALIGORA.style.left = "990px";
         pozycja = false
         ruszajCiulaP()
@@ -140,14 +223,28 @@ function doLewa(){
    
 }
 
+let wynik = document.querySelector(".wynik")
+
 document.addEventListener('keydown', function(event) {    
-    if (event.keyCode === 65) {
+    if(kuponyNaPiwoWaligory >= 29){
+        document.querySelector(".kuponyNaPiwoWaligory").innerHTML = "30"
+        wynik.innerHTML = "Wygral gracz 2"
         
-        doLewa()
+    }else if(kuponyNaPiwoWyrwidaba >= 29){
+        document.querySelector(".kuponyNaPiwoWyrwidaba").innerHTML = "30"
+        wynik.innerHTML = "Wygral gracz 1"
         
-    }else if(event.keyCode === 68){
-      zPrawa();
+    }else if(!skuty){
+        if (event.keyCode === 65) {
+        
+            doLewa()
+            
+        }else if(event.keyCode === 68){
+          zPrawa();
+        }
     }
 });
+
+
 
 
