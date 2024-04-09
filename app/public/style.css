@@ -30,6 +30,7 @@
     height: 800px;
     width: 50px;
     background-color: brown;
+    z-index: 1;
     position: absolute;
     left: 350px;
 }
@@ -38,6 +39,7 @@
     height: 800px;
     width: 50px;
     background-color: brown;
+    z-index: 1;
     position: absolute;
     left: 1050px;
 }
@@ -45,7 +47,7 @@
 .wyrwidab{
     height: 50px;
     width: 50px;
-    background-color: coral;
+    background-image: url("img/mietek2.png");
     position: absolute;
     top: 750px;
     left: 290px;
@@ -54,16 +56,16 @@
 .waligora{
     height: 50px;
     width: 50px;
-    background-color: rgb(255, 80, 80);
+    background-image: url("img/mietek2.png");
     position: absolute;
     top: 750px;
     left: 990px;
 }
 
 .ciulikL{
-    background-color: brown;
-    width: 70px;
-    height: 20px;
+    background-image: url("img/deska.png");
+    width: 100px;
+    height: 100px;
     position: absolute;
     top: 50px
     /* left: 47vw; */

@@ -7,8 +7,8 @@ socket.on("dolaczyl", (data) => {
 
 
 
-const CIULIKI_POS = [290, 390];
-const CIULIKIP = [990, 1090];
+const CIULIKI_POS = [265, 390];
+const CIULIKIP = [965, 1090];
 const PAPASMERF = document.querySelector(".KillingFloor");
 let tablica_ciulikow = [[],[]]
 let tablica_ciulikowP = [[],[]]
@@ -130,11 +130,12 @@ socket.on("czekajCwaniaku", id => {
     if(id == socket.id){
         skuty = true;
         let gracz = socket.id == tabGraczy[0] ? WYRWIDAB : WALIGORA
-        let tlo = window.getComputedStyle(gracz).getPropertyValue("background-color")
-        gracz.style.background = "green"
+        
+        gracz.style.filter = "invert(50%)"
         setTimeout(() =>{
             skuty = false;
-            gracz.style.background = tlo
+            gracz.style.filter = "invert(0)"
+            
         } , 1000);
     }
 })
