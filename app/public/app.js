@@ -231,9 +231,11 @@ document.addEventListener('keydown', function(event) {
         document.querySelector(".kuponyNaPiwoWaligory").innerHTML = "30"
         wynik.innerHTML = "Wygral gracz 2"
         
+        
     }else if(kuponyNaPiwoWyrwidaba >= 29){
         document.querySelector(".kuponyNaPiwoWyrwidaba").innerHTML = "30"
         wynik.innerHTML = "Wygral gracz 1"
+        
         
     }else if(!skuty){
         if (event.keyCode === 65) {

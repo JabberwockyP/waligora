@@ -70,3 +70,16 @@
     top: 50px
     /* left: 47vw; */
 }
+
+.landho{
+    width: 100vw;
+    height: 500px;
+    background-color: green;
+    position: absolute;
+    top: 800px;
+    z-index: 2;
+}
+
+.wynik{
+    z-index: 3;
+}
